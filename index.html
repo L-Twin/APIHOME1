@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание занятий</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style></style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">Расписание занятий</h1>
+      <div id="schedule" class="mt-3"></div>
+    </div>
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+    <script>
+      function loadSchedule() {
+        const jsonDataUrl = "schedule_data.json";
+  
+        fetch(jsonDataUrl)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("schedule").innerHTML = "";
+  
+            data.forEach(classItem => {
+              const classElement = document.createElement("div");
+              classElement.classList.add("card", "mb-3");
+  
+              const classBody = document.createElement("div");
+              classBody.classList.add("card-body");
+  
+              const className = document.createElement("h5");
+              className.classList.add("card-title");
+              className.textContent = classItem.name;
+  
+              const classTime = document.createElement("p");
+              classTime.classList.add("card-text");
+              classTime.textContent = "Время проведения: " + classItem.time;
+  
+              const maxParticipants = document.createElement("p");
+              maxParticipants.classList.add("card-text");
+              maxParticipants.textContent = "Максимальное количество участников: " + classItem.maxParticipants;
+  
+              const currentParticipants = document.createElement("p");
+              currentParticipants.classList.add("card-text");
+              currentParticipants.textContent = "Текущее количество участников: " + classItem.currentParticipants;
+  
+              const btnGroup = document.createElement("div");
+              btnGroup.classList.add("btn-group", "mt-2");
+  
+              const signUpBtn = document.createElement("button");
+              signUpBtn.classList.add("btn", "btn-primary");
+              signUpBtn.textContent = "Записаться";
+              signUpBtn.dataset.classId = classItem.id;
+              signUpBtn.onclick = signUp;
+  
+              const cancelBtn = document.createElement("button");
+              cancelBtn.classList.add("btn", "btn-secondary");
+              cancelBtn.textContent = "Отменить запись";
+              cancelBtn.dataset.classId = classItem.id;
+              cancelBtn.onclick = cancelSignUp;
+  
+              if (classItem.currentParticipants >= classItem.maxParticipants) {
+                signUpBtn.disabled = true;
+              }
+  
+              btnGroup.appendChild(signUpBtn);
+              btnGroup.appendChild(cancelBtn);
+              classBody.appendChild(className);
+              classBody.appendChild(classTime);
+              classBody.appendChild(maxParticipants);
+              classBody.appendChild(currentParticipants);
+              classBody.appendChild(btnGroup);
+              classElement.appendChild(classBody);
+  
+              document.getElementById("schedule").appendChild(classElement);
+            });
+          })
+          .catch(error => console.error("Error loading schedule:", error));
+      }
+  
+      function signUp(event) {
+        const classId = event.target.dataset.classId;
+  
+        console.log("Signed up for class with ID:", classId);
+  
+
+        loadSchedule();
+      }
+  
+      function cancelSignUp(event) {
+        const classId = event.target.dataset.classId;
+  
+        console.log("Cancelled sign up for class with ID:", classId);
+  
+        loadSchedule();
+      }
+  
+      window.onload = loadSchedule;
+    </script>
+</body>
+</html>

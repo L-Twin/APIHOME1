@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "name": "Yoga",
+      "time": "10:00 - 11:00",
+      "maxParticipants": 20,
+      "currentParticipants": 15
+    },
+    {
+      "id": 2,
+      "name": "Pilates",
+      "time": "12:00 - 13:00",
+      "maxParticipants": 15,
+      "currentParticipants": 10
+    },
+    {
+      "id": 3,
+      "name": "Zumba",
+      "time": "15:00 - 16:00",
+      "maxParticipants": 30,
+      "currentParticipants": 25
+    }
+  ]
